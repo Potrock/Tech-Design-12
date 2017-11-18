@@ -49,6 +49,8 @@ void loop() {
       previousSensor2 = sensorState2;
       sensorCount -= 2;
     }
+    previousSensor1 = sensorState1;
+    previousSensor2 = sensorState2;
     Serial.print("Sensor Count: ");
     Serial.println(sensorCount);
   }
