@@ -32,8 +32,7 @@ void loop() {
       previousSensor2 = LOW;
     }
   }
-  Serial.print("Sensor 1: ");
-    sensorState1 = HIGH;
+    Serial.print("Sensor 1: ");
     Serial.print(sensorState1);
     Serial.print(", Sensor 2: ");
     Serial.println(sensorState2);
