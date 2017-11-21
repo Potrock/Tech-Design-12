@@ -2,6 +2,7 @@
 #define SENSOR_2 A2
 int previousSensor1 = LOW;
 int previousSensor2 = LOW;
+int sensorState1, sensorState2;
 int sensorCount;
 int previousPos;
 int threshold = 10;
@@ -19,8 +20,8 @@ void loop() {
   }
   //HIGH = NO LIGHT = BLACK PART
   //LOW = LIGHT = WHITE PART
-  int sensorState1 = digitalRead(SENSOR_1);
-  int sensorState2 = digitalRead(SENSOR_2);
+  sensorState1 = digitalRead(SENSOR_1);
+  sensorState2 = digitalRead(SENSOR_2);
 
   /*
    * Logic:
@@ -34,24 +35,25 @@ void loop() {
   if (sensorState1 != previousSensor1 || sensorState2 != previousSensor2) {
     if (sensorState1 == sensorState2) {
       previousPos = 1;
-      previousSensor1 = sensorState1;
-      previousSensor2 = sensorState2;
+      updateSensors();
     }
     if (sensorState1 != previousSensor1 && sensorState1 == HIGH && previousPos == 1) {
-      sensorCount += 2;
-      previousSensor1 = sensorState1;
-      previousSensor2 = sensorState2;
+      sensorCount++;
+      updateSensors();
       previousPos = 2;
     }
     if (sensorState2 != previousSensor2 && sensorState2 == HIGH && previousPos == 1) {
-      previousPos = 2;
-      previousSensor1 = sensorState1;
-      previousSensor2 = sensorState2;
-      sensorCount -= 2;
+      previousPos = 3;
+      updateSensors();
+      sensorCount--;
     }
-    previousSensor1 = sensorState1;
-    previousSensor2 = sensorState2;
+    updateSensors();
     Serial.print("Sensor Count: ");
     Serial.println(sensorCount);
   }
+}
+
+void updateSensors() {
+  previousSensor1 = sensorState1;
+  previousSensor2 = sensorState2;
 }
