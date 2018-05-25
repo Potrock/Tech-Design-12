@@ -11,7 +11,7 @@ int previousSensor4 = LOW;
 int sensorState1, sensorState2, sensorState3, sensorState4;
 int sensorCount, sensorCount2;
 int previousPos1, previousPos2;
-int threshold = 15;
+int threshold = 50;
 
 void setup() {
   pinMode(SENSOR_1, INPUT);
@@ -142,12 +142,13 @@ void loop() {
     Serial.print("Right");
     sensorCount = 0;
     sensorCount2 = 0;
-  } else if (fabs(sensorCount2 - sensorCount) <= 7 && (sensorCount >= threshold || sensorCount2 >= threshold)) {
+  } else if (fabs(sensorCount2 - sensorCount) <= 30 && (sensorCount >= threshold || sensorCount2 >= threshold)) {
     Keyboard.write(218);
     Serial.print("Up");
     sensorCount = 0;
+    
     sensorCount2 = 0;
-  } else if (fabs(sensorCount2 - sensorCount) <= 7 && (sensorCount <= -threshold || sensorCount2 <=  -threshold)) {
+  } else if (fabs(sensorCount2 - sensorCount) <= 30 && (sensorCount <= -threshold || sensorCount2 <=  -threshold)) {
     Keyboard.write(217);
     Serial.print("Down");
     sensorCount = 0;
