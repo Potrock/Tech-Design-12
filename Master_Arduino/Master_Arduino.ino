@@ -12,7 +12,7 @@ char inputBuffer[10];
 int sensorState1, sensorState2, sensorState3, sensorState4;
 int sensorCount, sensorCount2;
 int previousPos1, previousPos2;
-int threshold;
+int threshold = 25;
 
 void setup() {
   pinMode(SENSOR_1, INPUT);
@@ -22,14 +22,6 @@ void setup() {
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    Serial.readBytes(inputBuffer, Serial.available());
-    if (inputBuffer == 'games') {
-      threshold = 15;
-    } else if (inputBuffer == 'street') {
-      threshold = 50;
-    }
-  }
   sensorState1 = digitalRead(SENSOR_1);
   sensorState2 = digitalRead(SENSOR_2);
   sensorState3 = digitalRead(SENSOR_3);
@@ -138,58 +130,26 @@ void loop() {
   Serial.print(" ");
   Serial.println(sensorCount2);
   //Keyboard logic
-  if (threshold == 15) {
-    if (sensorCount - sensorCount2 >= threshold) {
-      Keyboard.press(216);
-      delay(200);
-      Keyboard.release(216);
-      Serial.print("Left");
-      sensorCount = 0;
-      sensorCount2 = 0;
-    } else if (sensorCount - sensorCount2 <= -threshold) {
-      Keyboard.press(215);
-      delay(200);
-      Keyboard.release(215);
-      Serial.print("Right");
-      sensorCount = 0;
-      sensorCount2 = 0;
-    } else if ((sensorCount >= threshold && sensorCount2 >= threshold)) {
-      Keyboard.press(218);
-      delay(200);
-      Keyboard.release(218);
-      Serial.print("Up");
-      sensorCount = 0;
-      sensorCount2 = 0;
-    } else if ((sensorCount <= -threshold && sensorCount2 <= -threshold)) {
-      Keyboard.press(217);
-      delay(200);
-      Keyboard.release(217);
-      Serial.print("Down");
-      sensorCount = 0;
-      sensorCount2 = 0;
-    }
-  } else if (threshold == 50) {
-    if (sensorCount - sensorCount2 >= threshold) {
-      Keyboard.write(216);
-      Serial.print("Left");
-      sensorCount = 0;
-      sensorCount2 = 0;
-    } else if (sensorCount - sensorCount2 <= -threshold) {
-      Keyboard.write(215);
-      Serial.print("Right");
-      sensorCount = 0;
-      sensorCount2 = 0;
-    } else if (fabs(sensorCount2 - sensorCount) <= 30 && (sensorCount >= threshold || sensorCount2 >= threshold)) {
-      Keyboard.write(218);
-      Serial.print("Up");
-      sensorCount = 0;
-      sensorCount2 = 0;
-    } else if (fabs(sensorCount2 - sensorCount) <= 30 && (sensorCount <= -threshold || sensorCount2 <=  -threshold)) {
-      Keyboard.write(217);
-      Serial.print("Down");
-      sensorCount = 0;
-      sensorCount2 = 0;
-    }
+  if (sensorCount - sensorCount2 >= threshold) {
+    Keyboard.write(216);
+    Serial.print("Left");
+    sensorCount = 0;
+    sensorCount2 = 0;
+  } else if (sensorCount - sensorCount2 <= -threshold) {
+    Keyboard.write(215);
+    Serial.print("Right");
+    sensorCount = 0;
+    sensorCount2 = 0;
+  } else if (fabs(sensorCount2 - sensorCount) <= 30 && (sensorCount >= threshold || sensorCount2 >= threshold)) {
+    Keyboard.write(218);
+    Serial.print("Up");
+    sensorCount = 0;
+    sensorCount2 = 0;
+  } else if (fabs(sensorCount2 - sensorCount) <= 30 && (sensorCount <= -threshold || sensorCount2 <=  -threshold)) {
+    Keyboard.write(217);
+    Serial.print("Down");
+    sensorCount = 0;
+    sensorCount2 = 0;
   }
 }
 
